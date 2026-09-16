@@ -1,0 +1,406 @@
+/*==========================================================================*/
+/*                     H O V E R    &    P C    O N L Y                     */
+/*==========================================================================*/
+@media screen and (min-width: 1921px) {
+  .to-top {
+    right: calc(50% - 960px + 20px);
+  }
+}
+/* END screen-min:1921px */
+@media screen and (min-width: 751px) {
+  #lightboxOverlay,
+  #lightbox {
+    min-width: var(--content-width) !important;
+    width: 100% !important;
+  }
+  .sp {
+    display: none !important;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  .to-top a:hover {
+    opacity: 0.7;
+  }
+}
+/* END screen-min:751px */
+/* END screen-min:751px && screen-max:1919px */
+/* END screen-min:751px && screen-max:1650px */
+@media screen and (min-width: 751px) and (max-width: 1240px) {
+  .iList.fullWidth {
+    width: 100vw;
+  }
+  .iList.fullWidth.gap .iList--main li {
+    width: calc(50% - var(--gap));
+  }
+  .iList {
+    width: 100vw;
+  }
+  .iList.artists .iList--wrap {
+    max-width: 100%;
+  }
+  .iList.artists .iList--main {
+    gap: 10px;
+    width: calc(100% + 10px);
+  }
+  .iList.artists .iList--main li {
+    width: calc(50% - 10px);
+  }
+  .iList.artists .iList--name h4 {
+    font-size: 20px;
+  }
+}
+/* END screen-min:751px && screen-max:1440px */
+/*==========================================================================*/
+/*                        M O B I L E    D E V I C E                        */
+/*==========================================================================*/
+@media screen and (min-width: 1px) and (max-width: 750px) {
+  #wrapper {
+    min-width: unset !important;
+  }
+  .pc {
+    display: none !important;
+  }
+  * {
+    column-gap: none !important;
+    row-gap: none !important;
+  }
+  .to-top {
+    bottom: 100px;
+  }
+  .to-top > a {
+    width: 50px;
+    height: 50px;
+  }
+  .to-top > a::before {
+    inset: 4px 0 0;
+    margin: auto;
+    width: 10px;
+    height: 10px;
+  }
+  .sp320,
+  .sp375,
+  .sp425 {
+    display: block;
+  }
+  header {
+    height: 60px;
+  }
+  body.open-nav {
+    overflow: hidden;
+  }
+  body.open-nav .iHeader--menu {
+    left: 0;
+  }
+  .iHeader {
+    padding: 10px 10px;
+  }
+  .iHeader--hamburger {
+    display: block;
+  }
+  .iHeader--logo img {
+    height: 40px;
+  }
+  .iHeader--menu {
+    position: fixed;
+    top: 60px;
+    left: -100%;
+    width: 100%;
+    height: calc(100% - 60px);
+    background-color: #000001;
+    z-index: 100;
+    border-top: 1px solid #fff;
+    transition: all 0.3s ease-in-out;
+  }
+  .iHeader--menu ul {
+    flex-direction: column;
+    width: 100%;
+  }
+  .iHeader--menu ul li a {
+    font-size: 34px;
+  }
+  main {
+    margin-top: 60px;
+  }
+  .iMainvisual {
+    height: min(100vh - 60px, 500px);
+    background-image: url(../images/banner-sp.jpg);
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .iMainvisual--bg {
+    opacity: 0;
+  }
+  .iMainvisual--main {
+    width: 100%;
+    position: relative;
+    max-width: 100%;
+    padding: 40px 10px;
+    flex-direction: column;
+    transform: none;
+    top: unset;
+    left: unset;
+    gap: 20px;
+  }
+  .iMainvisual--img {
+    position: relative;
+    width: 200px;
+  }
+  .iMainvisual--content {
+    width: 100%;
+  }
+  .iMainvisual--list {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 450px;
+    margin: 0 auto;
+  }
+  .iMainvisual--list li {
+    width: 120px;
+    height: 120px;
+  }
+  .--padding {
+    padding: 40px 10px;
+  }
+  .ih3 {
+    font-size: min(6.25vw, 30px);
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+  }
+  .iMember--list {
+    width: 300px;
+    margin: 0 auto;
+  }
+  .iMember--list .slick-slide {
+    margin: 0 10px;
+  }
+  .iMember--list .slick-list {
+    overflow: unset;
+  }
+  .iMember--list li .img {
+    height: 450px;
+  }
+  .iMember--list li .info {
+    font-size: 12px;
+  }
+  .iHomeGround--wrap {
+    gap: 20px;
+    flex-direction: column;
+  }
+  .iHomeGround--info {
+    width: 100%;
+  }
+  .iHomeGround--info h4 {
+    font-size: min(5vw, 22px);
+  }
+  .iHomeGround--map {
+    width: 100%;
+  }
+  .iHomeGround--cooperate {
+    height: 28.125vw;
+  }
+  .iHomeGround--desc p {
+    font-size: 14px;
+  }
+  .iFooter {
+    padding: 20px 10px;
+  }
+  .iFooter--link {
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+  .iFooter--link li {
+    position: relative;
+    text-align: center;
+  }
+  .iFooter--link a {
+    position: relative;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    font-family: "FatFrank";
+    font-size: 20px;
+  }
+  .iFooter--link a:hover {
+    color: #e8da5d;
+  }
+  .iMatch {
+    position: relative;
+    background-image: url(../images/bg-home.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-top: 60px;
+  }
+  .iMatch--wrap {
+    position: relative;
+    padding: 0 0 60px;
+  }
+  .iMatch--title {
+    position: relative;
+    background-color: #fff;
+    width: fit-content;
+    padding: 10px 49px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    margin: 0 auto;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .iMatch--title h3 {
+    margin-bottom: 0;
+  }
+  .iMatch--month {
+    position: relative;
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: -36px;
+  }
+  .iMatch--month .month {
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    position: relative;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .iMatch--list {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding: 0 10px;
+  }
+  .iMatch--item {
+    width: 100%;
+    max-width: 420px;
+  }
+  .iMatch--item-title {
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  .iMatch--item-title .round {
+    position: relative;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: var(--font-kaizen);
+    letter-spacing: 0.1em;
+  }
+  .iMatch--item-title .date {
+    position: relative;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .iMatch--item-title .name {
+    font-size: 12px;
+    position: relative;
+  }
+  .iMatch--item-map {
+    position: relative;
+    text-align: center;
+    padding: 5px;
+    margin-top: 20px;
+    background-color: #2d2d2d;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 1em;
+    padding: 8px 6px;
+  }
+  .iMatch--team-info {
+    width: 150px;
+  }
+  .iMatch--team-logo {
+    height: 60px;
+    width: 60px;
+  }
+  .iMatch--team-name {
+    font-size: 12px;
+  }
+  .iMatch--team-scores {
+    height: 60px;
+  }
+  .iMatch--team-scores li {
+    font-size: 24px;
+    gap: 20px;
+    width: 40px;
+  }
+  .iMatch--team-coming {
+    height: 60px;
+  }
+  .iMatch--team-coming span {
+    font-size: 20px;
+  }
+  .pageHeader {
+    padding: 30px;
+    min-height: 160px;
+  }
+  .pageHeader .ih3 {
+    font-size: min(7.5vw, 28px);
+  }
+  .iMatchDetail {
+    padding: 20px 10px;
+  }
+  .iPartner--title {
+    font-size: 16px;
+  }
+  .iPartner--list {
+    gap: 5px;
+  }
+  .iPartner--list li {
+    width: 80px;
+  }
+  .iPartner--list.--main li {
+    width: 120px;
+  }
+}
+/* END min-width:1px && screen-max:750px */
+@media screen and (min-width: 375px) and (max-width: 750px) {
+  .sp320 {
+    display: none;
+  }
+}
+/* END min-width:375px && screen-max:750px */
+@media screen and (min-width: 425px) and (max-width: 750px) {
+  .sp375 {
+    display: none;
+  }
+}
+/* END min-width:425px && screen-max:750px */
+@media screen and (min-width: 475px) and (max-width: 750px) {
+  .sp425 {
+    display: none;
+  }
+}
+/* END min-width:475px && screen-max:750px */
+/* END min-width:525px && screen-max:750px */
+/*==========================================================================*/
+/*                 F O R   S P E C I F I E D   B R O W S E R                */
+/*==========================================================================*/
+/* EDGE  */
+/* FIREFOX */
+@-moz-document url-prefix() {}
+/* Safari 10.1+ (which is the latest version of Safari at this time) */
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+}
+/*==========================================================================*/
+/*                             E N D   A L L                                */
+/*==========================================================================*/
+
+/*# sourceMappingURL=responsive.css.map */

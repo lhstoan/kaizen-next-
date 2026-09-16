@@ -1,0 +1,11 @@
+/* Swiper replaces the legacy slick carousel; legacy CSS targets .slick-slide/.slick-active
+   for spacing and active-state opacity, and relies on .slick-list{overflow:unset} to let the
+   .info name badge bleed past the card edge. These rules bridge that gap for Swiper markup. */
+.iMember--list.swiper {
+	overflow: visible;
+	padding-bottom: 24px;
+}
+.iMember--list .swiper-slide {
+	margin: 0 15px;
+	opacity: 1;
+}
