@@ -1,4 +1,4 @@
-import type { Match, Member, Partner } from "@/types/home";
+import type { Match, Member } from "@/types/home";
 
 export const placeholderMembers: Member[] = Array.from({ length: 5 }).map((_, i) => ({
   id: String(i),
@@ -32,8 +32,4 @@ export const placeholderMatches: Match[] = [
     timeLabel: "",
     scores: { home: 3, away: 2 },
   },
-];
-
-export const placeholderPartners: Partner[] = [
-  { id: "1", name: "Sponsor", logoUrl: "/images/logo.png" },
 ];
