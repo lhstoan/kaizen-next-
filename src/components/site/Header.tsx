@@ -30,9 +30,6 @@ export default function Header() {
         <div className="iHeader--menu">
           <ul className="iHeader--list">
             <li>
-              <Link href="/matches">MATCHES</Link>
-            </li>
-            <li>
               <Link href="/products">PRODUCT</Link>
             </li>
           </ul>
