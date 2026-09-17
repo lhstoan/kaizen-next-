@@ -32,6 +32,9 @@ export default function Header() {
             <li>
               <Link href="/matches">MATCHES</Link>
             </li>
+            <li>
+              <Link href="/products">PRODUCT</Link>
+            </li>
           </ul>
         </div>
         <div className="iHeader--hamburger">

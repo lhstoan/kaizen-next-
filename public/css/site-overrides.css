@@ -1,3 +1,13 @@
+/* body { font-family: "FatFrank" } in styles.css expects this face — the legacy repo declares
+   it inline in kaizen/header.php's <style> block, not in the compiled styles.css itself. */
+@font-face {
+	font-family: "FatFrank";
+	src: url("/fonts/FatFrank-Heavy.woff2") format("woff2"), url("/fonts/FatFrank-Heavy.woff") format("woff");
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+}
+
 /* Swiper replaces the legacy slick carousel; legacy CSS targets .slick-slide/.slick-active
    for spacing and active-state opacity, and relies on .slick-list{overflow:unset} to let the
    .info name badge bleed past the card edge. These rules bridge that gap for Swiper markup. */
