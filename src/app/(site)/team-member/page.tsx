@@ -1,7 +1,7 @@
 import MainVisual from "@/components/site/MainVisual";
 import Partners from "@/components/site/Partners";
 import TeamMemberGrid from "@/components/site/TeamMemberGrid";
-import { placeholderMembers } from "@/lib/placeholder-data";
+import { getMembers } from "@/lib/members";
 import { getPartnerGroups } from "@/lib/partners";
 
 export const metadata = {
@@ -9,12 +9,15 @@ export const metadata = {
 };
 
 export default async function TeamMemberPage() {
-  const { mainPartners, internationalPartners, otherPartners } = await getPartnerGroups();
+  const [{ mainPartners, internationalPartners, otherPartners }, members] = await Promise.all([
+    getPartnerGroups(),
+    getMembers(),
+  ]);
 
   return (
     <main>
       <MainVisual />
-      <TeamMemberGrid members={placeholderMembers} />
+      <TeamMemberGrid members={members} />
       <Partners
         mainPartners={mainPartners}
         internationalPartners={internationalPartners}

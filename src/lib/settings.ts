@@ -6,6 +6,7 @@ export type SiteSettings = {
   facebook_url: string;
   tiktok_url: string;
   youtube_url: string;
+  matches_month: string;
 };
 
 // Values the site shipped with — used until the row exists, and whenever a row is
@@ -16,6 +17,7 @@ export const SITE_SETTING_DEFAULTS: SiteSettings = {
   facebook_url: "https://www.facebook.com/profile.php?id=61572834952468",
   tiktok_url: "https://www.tiktok.com/@kaizen.badminton",
   youtube_url: "https://www.youtube.com/@KaizenBadmintonHouse",
+  matches_month: "September",
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {

@@ -1,12 +1,14 @@
 import SectionHeading from "@/components/site/SectionHeading";
 import MatchItem from "@/components/site/MatchItem";
-import { placeholderMatches } from "@/lib/placeholder-data";
+import { getMatches } from "@/lib/matches";
 
 export const metadata = {
   title: "MATCHES | KAIZEN BADMINTON",
 };
 
-export default function MatchesPage() {
+export default async function MatchesPage() {
+  const matches = await getMatches();
+
   return (
     <main>
       <div className="pageHeader">
@@ -15,7 +17,7 @@ export default function MatchesPage() {
       <div className="iMatchDetail">
         <div className="iMatchDetail--wrap">
           <ul className="iMatch--list">
-            {placeholderMatches.map((match) => (
+            {matches.map((match) => (
               <MatchItem match={match} key={match.id} />
             ))}
           </ul>

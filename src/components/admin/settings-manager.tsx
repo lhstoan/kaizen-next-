@@ -41,6 +41,7 @@ const settingsSchema = z.object({
   facebook_url: z.string(),
   tiktok_url: z.string(),
   youtube_url: z.string(),
+  matches_month: z.string(),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
@@ -162,6 +163,14 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
               <FieldLabel htmlFor="youtube_url">YouTube</FieldLabel>
               <Input id="youtube_url" className={fieldInput} {...form.register("youtube_url")} />
             </div>
+          </div>
+        </Card>
+
+        <Card className="flex flex-col gap-4 p-5">
+          <SectionLabel>Homepage matches</SectionLabel>
+          <div className="flex max-w-xs flex-col gap-1">
+            <FieldLabel htmlFor="matches_month">Month caption</FieldLabel>
+            <Input id="matches_month" className={fieldInput} {...form.register("matches_month")} />
           </div>
         </Card>
 
