@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Users, Trophy, Calendar, ShoppingBag, Medal, Newspaper } from "lucide-react";
+import { Users, Trophy, Calendar, ShoppingBag, Medal, Newspaper, Settings } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/admin/members", label: "Members", icon: Users },
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: "/admin/hall-of-fame", label: "Hall of Fame", icon: Medal },
   { href: "/admin/news", label: "Hot News", icon: Newspaper },
   { href: "/admin/partners", label: "Partners", icon: Trophy },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {

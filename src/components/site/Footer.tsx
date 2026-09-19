@@ -1,23 +1,25 @@
-export default function Footer() {
+import { getSiteSettings } from "@/lib/settings";
+
+export default async function Footer() {
+  const { facebook_url, tiktok_url, youtube_url } = await getSiteSettings();
+
+  const links = [
+    { label: "FACEBOOK", href: facebook_url },
+    { label: "TIKTOK", href: tiktok_url },
+    { label: "YOUTUBE", href: youtube_url },
+  ];
+
   return (
     <footer>
       <div className="iFooter">
         <ul className="iFooter--link">
-          <li>
-            <a href="https://www.facebook.com/profile.php?id=61572834952468" target="_blank" rel="noreferrer">
-              FACEBOOK
-            </a>
-          </li>
-          <li>
-            <a href="https://www.tiktok.com/@kaizen.badminton" target="_blank" rel="noreferrer">
-              TIKTOK
-            </a>
-          </li>
-          <li>
-            <a href="https://www.youtube.com/@KaizenBadmintonHouse" target="_blank" rel="noreferrer">
-              YOUTUBE
-            </a>
-          </li>
+          {links.map((link) => (
+            <li key={link.label}>
+              <a href={link.href} target="_blank" rel="noreferrer">
+                {link.label}
+              </a>
+            </li>
+          ))}
         </ul>
         <div className="iFooter--logo">
           <div className="iFooter--copyright">

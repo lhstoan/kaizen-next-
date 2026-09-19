@@ -419,3 +419,14 @@
 		white-space: nowrap;
 	}
 }
+
+/* Main visual banners come from site_settings, handed in as CSS vars by MainVisual;
+   the visible artwork is this background, not the transparent legacy <img> pair. */
+.iMainvisual {
+	background-image: var(--banner-pc);
+}
+@media screen and (max-width: 750px) {
+	.iMainvisual {
+		background-image: var(--banner-sp);
+	}
+}
