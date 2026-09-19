@@ -8,40 +8,54 @@
 	font-display: swap;
 }
 
-/* Swiper replaces the legacy slick carousel; legacy CSS targets .slick-slide/.slick-active
-   for spacing and active-state opacity, and relies on .slick-list{overflow:unset} to let the
-   .info name badge bleed past the card edge. These rules bridge that gap for Swiper markup. */
-/* Four cards sit inside the content width; the rest of the track bleeds out to the
-   screen edges, so the neighbouring slides stay visible. */
-.iMember--list.swiper {
-	overflow: visible;
-	padding-bottom: 24px;
-	/* styles.css widens the list by 15px each side for the slick gutter; Swiper sizes
-	   its slides from the container width, so that overhang cut the last card short. */
-	width: 100%;
+/* Members marquee. The legacy carousel was slick, then Swiper; both needed clones
+   to loop and ran dry with only a handful of players, leaving a blank track. The
+   list is rendered twice in the DOM and shifted by exactly half its width, so the
+   run reads 1-8, 1-8, forever, with no seam and nothing to stall. */
+.iMember--marquee {
+	position: relative;
+	/* Cards drift past the content width out to the screen edges. */
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: 0 0 24px;
+	overflow: hidden;
+	/* The whole run starts one screen-gutter in, so the first card lines up with the
+	   content column rather than the viewport edge. */
+	--marquee-gutter: calc((100vw - min(var(--content-width), 100vw - 40px)) / 2);
+}
+.iMember--marquee .iMember--list {
+	display: flex;
+	flex-wrap: nowrap;
+	width: max-content;
 	margin: 0;
+	padding-left: var(--marquee-gutter);
+	gap: 30px;
+	animation: kzMemberMarquee 45s linear infinite;
 }
-/* ...and the bleed must not add a horizontal scrollbar. */
-#wrapper {
-	overflow-x: clip;
+.iMember--marquee:hover .iMember--list {
+	animation-play-state: paused;
 }
-.iMember--list .swiper-slide {
+.iMember--list li {
+	flex: 0 0 auto;
+	width: calc((min(var(--content-width), 100vw - 40px) - 90px) / 4);
 	opacity: 1;
 }
-/* slidesPerView: auto, so the card width lives here: four across the content width
-   (1200px) minus the three 30px gaps. */
-.iMember--list .swiper-slide {
-	width: calc((100% - 90px) / 4);
+@keyframes kzMemberMarquee {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		/* Half the track plus the gap that follows it — that lands exactly on the
+		   duplicate of the first card. */
+		transform: translate3d(calc(-50% - 15px), 0, 0);
+	}
 }
-/* A marquee has to drift at a constant rate; the default easing is what made the
-   track visibly speed up and stall on every cycle. */
-.iMember--list .swiper-wrapper {
-	transition-timing-function: linear;
-}
-
-@media screen and (max-width: 750px) {
-	.iMember--list .swiper-slide {
-		width: 78%;
+@media (prefers-reduced-motion: reduce) {
+	.iMember--marquee .iMember--list {
+		animation: none;
+	}
+	.iMember--marquee {
+		overflow-x: auto;
 	}
 }
 
