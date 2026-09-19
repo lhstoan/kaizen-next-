@@ -28,6 +28,22 @@
 .iMember--list .swiper-slide {
 	opacity: 1;
 }
+/* slidesPerView: auto, so the card width lives here: four across the content width
+   (1200px) minus the three 30px gaps. */
+.iMember--list .swiper-slide {
+	width: calc((100% - 90px) / 4);
+}
+/* A marquee has to drift at a constant rate; the default easing is what made the
+   track visibly speed up and stall on every cycle. */
+.iMember--list .swiper-wrapper {
+	transition-timing-function: linear;
+}
+
+@media screen and (max-width: 750px) {
+	.iMember--list .swiper-slide {
+		width: 78%;
+	}
+}
 
 /* .iProduct--item .img is an <a> Fancybox trigger in this port (legacy wrapped the
    same markup for the CDN Fancybox bundle) — flag it as zoomable, and keep the
