@@ -7,7 +7,7 @@ export default function MemberCard({ member }: { member: Member }) {
   return (
     <>
       <div className="img">
-        <Image src={member.photoUrl} alt={member.fullName} width={200} height={200} />
+        <Image src={member.photoUrl} alt={member.fullName} width={450} height={800} />
       </div>
       <div className="info">
         <div className="city">

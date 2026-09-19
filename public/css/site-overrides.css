@@ -233,8 +233,11 @@
 	position: relative;
 	opacity: 1;
 }
+/* Player photos are all 900x1600, so the frame follows that ratio instead of a
+   fixed height — object-fit: cover then has nothing left to crop. */
 .iTeam--list li .img {
-	height: 430px;
+	height: auto;
+	aspect-ratio: 9 / 16;
 }
 
 @media screen and (max-width: 750px) {
@@ -270,7 +273,7 @@
 		gap: 20px 12px;
 	}
 	.iTeam--list li .img {
-		height: 300px;
+		height: auto;
 	}
 }
 
