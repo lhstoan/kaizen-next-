@@ -88,6 +88,48 @@
 	cursor: pointer;
 }
 
+/* The photo is a CSS background, which has no load event of its own and no way to fade
+   in, so the card used to sit on styles.css's flat black box until the shot appeared.
+   ProductCard adds .is-loaded once its transparent <img> fires onLoad; until then this
+   shimmer stands in, tuned light because the mockups are shot on white. */
+.iProduct--item .img::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(100deg, #e9e9e9 30%, #f6f6f6 50%, #e9e9e9 70%) 0 0 / 300% 100%;
+	animation: iProductSkeleton 1.4s ease-in-out infinite;
+	pointer-events: none;
+	transition: opacity 0.35s ease;
+}
+.iProduct--item .img.is-loaded::before {
+	opacity: 0;
+	animation: none;
+}
+@keyframes iProductSkeleton {
+	from { background-position: 150% 0; }
+	to { background-position: -150% 0; }
+}
+
+/* Keyboard focus on the swatches, which are role="button" list items. */
+.iProduct--item .colors li:focus-visible,
+.iProduct--cate li:focus-visible {
+	outline: 2px solid #e00327;
+	outline-offset: 2px;
+}
+
+/* Shown when a category filter matches nothing. */
+.iProduct--empty {
+	padding: 60px 0;
+	color: #888;
+	font-size: 14px;
+	text-align: center;
+	width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.iProduct--item .img::before { animation: none; }
+}
+
 /* Hall of Fame — no legacy counterpart to port, so the rules live here rather than in
    the compiled styles.css. Follows the club mockup: a full-bleed black board under the
    main visual, a vertical year gutter, one white champion plate per season, and the

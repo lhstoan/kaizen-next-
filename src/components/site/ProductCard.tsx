@@ -6,6 +6,10 @@ import { optimizedImage } from "@/lib/image";
 
 export default function ProductCard({ product }: { product: Product }) {
   const [activeColor, setActiveColor] = useState(0);
+  // Keyed by URL, not a single boolean: switching colorway has to show the skeleton
+  // again for a shot the browser has not decoded yet, but never for one it already has.
+  const [loaded, setLoaded] = useState<Record<string, boolean>>({});
+
   const image = product.colors[activeColor]?.image || product.imageUrl;
   // The card is ~290px wide; the lightbox is full screen but still has no use for
   // the untouched 8 MB original.
@@ -20,21 +24,32 @@ export default function ProductCard({ product }: { product: Product }) {
     .filter((url) => url && url !== image)
     .map((url) => optimizedImage(url, 1920));
 
+  const markLoaded = (url: string) => setLoaded((prev) => (prev[url] ? prev : { ...prev, [url]: true }));
+
   return (
     <div className="iProduct--item">
       <a
-        className="img"
+        className={`img${loaded[thumb] ? " is-loaded" : ""}`}
         style={{ ["--bg" as string]: `url("${thumb}")` }}
         data-fancybox={galleryId}
         href={full}
       >
+        {/* Legacy CSS keeps this one transparent and paints the photo as the <a>'s
+            background, so its load event is the only signal the shot is on screen. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={thumb} alt={product.title} loading="lazy" decoding="async" />
+        <img
+          src={thumb}
+          alt={product.title}
+          decoding="async"
+          onLoad={() => markLoaded(thumb)}
+          onError={() => markLoaded(thumb)}
+        />
       </a>
-      {/* The visible thumbnail is a CSS background, so clicking a swatch asks for a
-          URL the browser has never seen and the card goes blank while it loads.
-          These warm the cache for every colorway as soon as the card scrolls near. */}
-      {product.colors.map((color) => (
+
+      {/* Clicking a swatch rewrites --bg, and a CSS background is only fetched at that
+          moment, so the card would go blank on every switch. These warm the cache — and
+          their load events mean the skeleton is skipped entirely for a ready colorway. */}
+      {product.colors.map((color) =>
         color.image && color.image !== image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -44,10 +59,12 @@ export default function ProductCard({ product }: { product: Product }) {
             aria-hidden
             loading="lazy"
             decoding="async"
+            onLoad={() => markLoaded(optimizedImage(color.image, 640))}
             style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
           />
-        ) : null
-      ))}
+        ) : null,
+      )}
+
       <div className="content">
         <div className="title">{product.title}</div>
         {product.colors.length > 0 && (
@@ -58,7 +75,17 @@ export default function ProductCard({ product }: { product: Product }) {
                 className={i === activeColor ? "active" : ""}
                 style={{ backgroundColor: color.code }}
                 title={color.name}
+                role="button"
+                tabIndex={0}
+                aria-label={`${product.title} — ${color.name}`}
+                aria-pressed={i === activeColor}
                 onClick={() => setActiveColor(i)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveColor(i);
+                  }
+                }}
               />
             ))}
           </ul>
