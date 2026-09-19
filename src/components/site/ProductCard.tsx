@@ -31,6 +31,23 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={thumb} alt={product.title} loading="lazy" decoding="async" />
       </a>
+      {/* The visible thumbnail is a CSS background, so clicking a swatch asks for a
+          URL the browser has never seen and the card goes blank while it loads.
+          These warm the cache for every colorway as soon as the card scrolls near. */}
+      {product.colors.map((color) => (
+        color.image && color.image !== image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={`preload-${color.name}`}
+            src={optimizedImage(color.image, 640)}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
+          />
+        ) : null
+      ))}
       <div className="content">
         <div className="title">{product.title}</div>
         {product.colors.length > 0 && (
