@@ -10,6 +10,7 @@ import { Pencil, Trash2, Plus, FileText, ImageIcon, GripVertical, X } from "luci
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import ImagePickerDialog from "@/components/admin/image-picker-dialog";
+import RichTextEditor from "@/components/admin/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -311,16 +312,16 @@ export default function PostsManager({ initialPosts }: { initialPosts: AdminPost
                     <Input id="excerpt" className={fieldInput} {...form.register("excerpt")} />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <FieldLabel htmlFor="body">Body</FieldLabel>
-                    <textarea
-                      id="body"
-                      rows={12}
-                      className="rounded-md border border-neutral-300 bg-white p-3 text-sm text-neutral-900 outline-none focus-visible:border-[#e00327] focus-visible:ring-2 focus-visible:ring-[#e00327]/30"
-                      {...form.register("body")}
+                    <FieldLabel>Body</FieldLabel>
+                    {/* Remounted per post so the editor picks up the loaded content. */}
+                    <RichTextEditor
+                      key={editing?.id ?? "new"}
+                      value={form.getValues("body")}
+                      onChange={(html) => form.setValue("body", html, { shouldDirty: true })}
                     />
                     <p className="text-xs text-neutral-400">
-                      Plain text. Leave a blank line between paragraphs — each block becomes its own
-                      paragraph on the site.
+                      Formatting is saved as HTML and sanitised before it reaches the site, so only
+                      the tags this toolbar produces survive.
                     </p>
                   </div>
                 </section>

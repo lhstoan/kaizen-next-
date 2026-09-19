@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Partners from "@/components/site/Partners";
+import PostBody from "@/components/site/PostBody";
 import { getPost } from "@/lib/posts";
 import { getPartnerGroups } from "@/lib/partners";
 
@@ -35,9 +36,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         <div className="iBlog--content">
           <h2>{post.title}</h2>
           {post.publishedAt && <p className="iBlog--date">{post.publishedAt}</p>}
-          {paragraphs.map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
+          <PostBody body={post.body} />
         </div>
       </div>
       <Partners

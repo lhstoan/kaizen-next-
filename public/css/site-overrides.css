@@ -433,12 +433,6 @@
 
 /* Blog detail — legacy styles .iBlog, but the ported page adds a date line and needs
    body copy that is readable at the 1100px content width. */
-.iBlog--content > p {
-	margin-top: 16px;
-	font-size: 15px;
-	line-height: 1.9em;
-	white-space: pre-line;
-}
 .iBlog--content .iBlog--date {
 	margin-top: 8px;
 	text-align: center;
@@ -460,4 +454,41 @@
 	.iBlog h2 {
 		font-size: 20px;
 	}
+}
+
+/* Rich-text body of a blog post (sanitised HTML from the admin editor). */
+.iBlog--body p {
+	margin-top: 16px;
+	font-size: 15px;
+	line-height: 1.9em;
+}
+.iBlog--body h3,
+.iBlog--body h4 {
+	margin-top: 26px;
+	font-size: 19px;
+	font-weight: bold;
+}
+.iBlog--body ul,
+.iBlog--body ol {
+	margin-top: 16px;
+	padding-left: 24px;
+	font-size: 15px;
+	line-height: 1.9em;
+}
+.iBlog--body ul {
+	list-style: disc;
+}
+.iBlog--body ol {
+	list-style: decimal;
+}
+.iBlog--body blockquote {
+	margin: 20px 0 0;
+	padding-left: 16px;
+	border-left: 3px solid var(--color-primary);
+	color: #555;
+	font-style: italic;
+}
+.iBlog--body a {
+	color: var(--color-primary);
+	text-decoration: underline;
 }

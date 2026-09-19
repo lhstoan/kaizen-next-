@@ -127,3 +127,33 @@
     @apply font-sans;
     }
 }
+/* Tiptap output inside the admin editor — the public site styles .iBlog--body itself. */
+.prose-editor p {
+  margin: 0 0 0.75em;
+}
+.prose-editor h3 {
+  margin: 0 0 0.5em;
+  font-size: 1.15em;
+  font-weight: 700;
+}
+.prose-editor ul,
+.prose-editor ol {
+  margin: 0 0 0.75em;
+  padding-left: 1.4em;
+}
+.prose-editor ul {
+  list-style: disc;
+}
+.prose-editor ol {
+  list-style: decimal;
+}
+.prose-editor blockquote {
+  margin: 0 0 0.75em;
+  padding-left: 0.9em;
+  border-left: 3px solid #e5e5e5;
+  color: #666;
+}
+.prose-editor a {
+  color: #e00327;
+  text-decoration: underline;
+}
