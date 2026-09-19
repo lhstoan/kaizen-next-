@@ -11,12 +11,21 @@
 /* Swiper replaces the legacy slick carousel; legacy CSS targets .slick-slide/.slick-active
    for spacing and active-state opacity, and relies on .slick-list{overflow:unset} to let the
    .info name badge bleed past the card edge. These rules bridge that gap for Swiper markup. */
+/* Four cards sit inside the content width; the rest of the track bleeds out to the
+   screen edges, so the neighbouring slides stay visible. */
 .iMember--list.swiper {
 	overflow: visible;
 	padding-bottom: 24px;
+	/* styles.css widens the list by 15px each side for the slick gutter; Swiper sizes
+	   its slides from the container width, so that overhang cut the last card short. */
+	width: 100%;
+	margin: 0;
+}
+/* ...and the bleed must not add a horizontal scrollbar. */
+#wrapper {
+	overflow-x: clip;
 }
 .iMember--list .swiper-slide {
-	margin: 0 15px;
 	opacity: 1;
 }
 
@@ -233,9 +242,10 @@
 	position: relative;
 	opacity: 1;
 }
-/* Player photos are all 900x1600, so the frame follows that ratio instead of a
-   fixed height — object-fit: cover then has nothing left to crop. */
-.iTeam--list li .img {
+/* Player photos are all 900x1600, so the frame follows that ratio instead of the
+   fixed height legacy set — object-fit: cover then has nothing left to crop. This
+   covers the homepage carousel as well as the team grid. */
+.iMember--list li .img {
 	height: auto;
 	aspect-ratio: 9 / 16;
 }
@@ -272,7 +282,7 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 20px 12px;
 	}
-	.iTeam--list li .img {
+	.iMember--list li .img {
 		height: auto;
 	}
 }

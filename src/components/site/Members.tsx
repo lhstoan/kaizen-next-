@@ -16,7 +16,7 @@ export default function Members({ members }: { members: Member[] }) {
           className="iMember--list"
           modules={[Autoplay]}
           slidesPerView={4}
-          spaceBetween={0}
+          spaceBetween={30}
           loop
           autoplay={{ delay: 2000 }}
           speed={700}
