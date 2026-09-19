@@ -26,6 +26,13 @@ export default function ProductCard({ product }: { product: Product }) {
 
   const markLoaded = (url: string) => setLoaded((prev) => (prev[url] ? prev : { ...prev, [url]: true }));
 
+  // A cached image can finish decoding between the server HTML and hydration, so its
+  // onLoad never reaches React and the skeleton would sit there forever. The ref runs
+  // on attach, when .complete already tells us the answer.
+  const checkOnAttach = (url: string) => (el: HTMLImageElement | null) => {
+    if (el?.complete && el.naturalWidth > 0) markLoaded(url);
+  };
+
   return (
     <div className="iProduct--item">
       <a
@@ -38,6 +45,7 @@ export default function ProductCard({ product }: { product: Product }) {
             background, so its load event is the only signal the shot is on screen. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          ref={checkOnAttach(thumb)}
           src={thumb}
           alt={product.title}
           decoding="async"
@@ -54,6 +62,7 @@ export default function ProductCard({ product }: { product: Product }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             key={`preload-${color.name}`}
+            ref={checkOnAttach(optimizedImage(color.image, 640))}
             src={optimizedImage(color.image, 640)}
             alt=""
             aria-hidden
