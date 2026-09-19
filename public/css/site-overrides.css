@@ -430,3 +430,34 @@
 		background-image: var(--banner-sp);
 	}
 }
+
+/* Blog detail — legacy styles .iBlog, but the ported page adds a date line and needs
+   body copy that is readable at the 1100px content width. */
+.iBlog--content > p {
+	margin-top: 16px;
+	font-size: 15px;
+	line-height: 1.9em;
+	white-space: pre-line;
+}
+.iBlog--content .iBlog--date {
+	margin-top: 8px;
+	text-align: center;
+	color: #888;
+	font-size: 13px;
+}
+/* The thumbnail is fixed-height on desktop; without it the -100px pull on the content
+   card would hang over the header on phones. */
+@media screen and (max-width: 750px) {
+	.iBlog--thumbnail {
+		height: 220px;
+	}
+	.iBlog--content {
+		margin-top: -40px;
+		padding: 20px 16px;
+		min-height: 0;
+		border-radius: 12px;
+	}
+	.iBlog h2 {
+		font-size: 20px;
+	}
+}

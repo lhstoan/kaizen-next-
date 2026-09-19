@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: "/team-member", label: "TEAM MEMBER" },
   { href: "/products", label: "PRODUCT" },
   { href: "/hall-of-fame", label: "HALL OF FAME" },
+  { href: "/blogs", label: "BLOGS" },
 ];
 
 export default function Header() {

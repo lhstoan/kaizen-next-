@@ -46,3 +46,13 @@ export type NewsItem = {
   imageUrl: string;
   featured: boolean;
 };
+
+export type Post = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  coverUrl: string;
+  publishedAt: string;
+};
