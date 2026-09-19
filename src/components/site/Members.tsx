@@ -15,7 +15,10 @@ export default function Members({ members }: { members: Member[] }) {
     <section className="iMember --padding">
       <div className="iMember--wrap --wrap">
         <SectionHeading en="Members" jp="プレイヤー" />
-        <div className="iMember--marquee">
+        {/* The shift is computed from the card count, not a percentage: the name badge
+            hangs past its card, so the track's own width is a few pixels wider than the
+            cards it holds and a -50% shift would drift out of step every cycle. */}
+        <div className="iMember--marquee" style={{ ["--member-count" as string]: members.length }}>
           <ul className="iMember--list">
             {track.map((member, i) => (
               <li key={`${member.id}-${i}`} aria-hidden={i >= members.length}>

@@ -10,8 +10,8 @@
 
 /* Members marquee. The legacy carousel was slick, then Swiper; both needed clones
    to loop and ran dry with only a handful of players, leaving a blank track. The
-   list is rendered twice in the DOM and shifted by exactly half its width, so the
-   run reads 1-8, 1-8, forever, with no seam and nothing to stall. */
+   list is rendered twice in the DOM and shifted by exactly one run of cards, so the
+   sequence reads 1-8, 1-8, forever, with no seam and nothing to stall. */
 .iMember--marquee {
 	position: relative;
 	/* Cards drift past the content width out to the screen edges. */
@@ -19,17 +19,21 @@
 	margin-left: calc(50% - 50vw);
 	padding: 0 0 24px;
 	overflow: hidden;
-	/* The whole run starts one screen-gutter in, so the first card lines up with the
-	   content column rather than the viewport edge. */
-	--marquee-gutter: calc((100vw - min(var(--content-width), 100vw - 40px)) / 2);
+	/* The run starts one screen-gutter in, so the first card lines up with the content
+	   column rather than the viewport edge. It has to sit on this wrapper: padding on
+	   the animated list counts toward its width, which would throw the -50% shift off
+	   by exactly that much and make the loop jump every cycle. */
+	padding-left: calc((100vw - min(var(--content-width), 100vw - 40px)) / 2);
+	--marquee-gap: 30px;
+	--marquee-card: calc((min(var(--content-width), 100vw - 40px) - var(--marquee-gap) * 3) / 4);
 }
 .iMember--marquee .iMember--list {
 	display: flex;
 	flex-wrap: nowrap;
 	width: max-content;
 	margin: 0;
-	padding-left: var(--marquee-gutter);
-	gap: 30px;
+	padding: 0;
+	gap: var(--marquee-gap);
 	animation: kzMemberMarquee 45s linear infinite;
 }
 .iMember--marquee:hover .iMember--list {
@@ -37,7 +41,7 @@
 }
 .iMember--list li {
 	flex: 0 0 auto;
-	width: calc((min(var(--content-width), 100vw - 40px) - 90px) / 4);
+	width: var(--marquee-card);
 	opacity: 1;
 }
 @keyframes kzMemberMarquee {
@@ -45,11 +49,25 @@
 		transform: translate3d(0, 0, 0);
 	}
 	to {
-		/* Half the track plus the gap that follows it — that lands exactly on the
-		   duplicate of the first card. */
-		transform: translate3d(calc(-50% - 15px), 0, 0);
+		/* One full run — count x (card + gap) — lands on the duplicate of the first
+		   card. Measured from the cards themselves, not the track's width: the name
+		   badge hangs past its card, so the track is a few pixels wider than the run
+		   and a -50% shift would slip further out of step every cycle. */
+		transform: translate3d(
+			calc(-1 * var(--member-count) * (var(--marquee-card) + var(--marquee-gap))),
+			0,
+			0
+		);
 	}
 }
+/* One big card per phone screen, with the next one peeking in. */
+@media screen and (max-width: 750px) {
+	.iMember--marquee {
+		--marquee-gap: 16px;
+		--marquee-card: 76vw;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.iMember--marquee .iMember--list {
 		animation: none;
