@@ -56,23 +56,26 @@ export default function ProductCard({ product }: { product: Product }) {
 
       {/* Clicking a swatch rewrites --bg, and a CSS background is only fetched at that
           moment, so the card would go blank on every switch. These warm the cache — and
-          their load events mean the skeleton is skipped entirely for a ready colorway. */}
-      {product.colors.map((color) =>
-        color.image && color.image !== image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={`preload-${color.name}`}
-            ref={checkOnAttach(optimizedImage(color.image, 640))}
-            src={optimizedImage(color.image, 640)}
-            alt=""
-            aria-hidden
-            loading="lazy"
-            decoding="async"
-            onLoad={() => markLoaded(optimizedImage(color.image, 640))}
-            style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
-          />
-        ) : null,
-      )}
+          their load events mean the skeleton is skipped entirely for a ready colorway.
+          They wait for the visible thumbnail: with a dozen cards on screen the preloads
+          otherwise open ~18 extra requests that compete with the shots being looked at. */}
+      {loaded[thumb] &&
+        product.colors.map((color) =>
+          color.image && color.image !== image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={`preload-${color.name}`}
+              ref={checkOnAttach(optimizedImage(color.image, 640))}
+              src={optimizedImage(color.image, 640)}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              onLoad={() => markLoaded(optimizedImage(color.image, 640))}
+              style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
+            />
+          ) : null,
+        )}
 
       <div className="content">
         <div className="title">{product.title}</div>
