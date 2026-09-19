@@ -1,6 +1,9 @@
+export type MemberGender = "men" | "women";
+
 export type Member = {
   id: string;
   fullName: string;
+  gender: MemberGender;
   nationality: string;
   event: string[];
   photoUrl: string;
@@ -23,4 +26,23 @@ export type Partner = {
   id: string;
   name: string;
   logoUrl: string;
+};
+
+export type HallOfFameEntry = {
+  id: string;
+  year: number;
+  rank: string;
+  championName: string;
+  championLogoUrl: string;
+  topScorers: { name: string; logoUrl: string }[];
+};
+
+export type NewsItem = {
+  id: string;
+  labelEn: string;
+  labelJp: string;
+  title: string;
+  link: string;
+  imageUrl: string;
+  featured: boolean;
 };

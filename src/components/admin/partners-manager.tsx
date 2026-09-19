@@ -26,6 +26,7 @@ export type AdminPartner = {
   main_partner: boolean;
   international_partner: boolean;
   sort_order: number;
+  active: boolean;
 };
 
 const partnerSchema = z.object({
@@ -33,7 +34,8 @@ const partnerSchema = z.object({
   logo_url: z.string().min(1, "Required"),
   main_partner: z.boolean(),
   international_partner: z.boolean(),
-  sort_order: z.coerce.number().int().min(0),
+  sort_order: z.number().int().min(0),
+  active: z.boolean(),
 });
 
 type PartnerFormValues = z.infer<typeof partnerSchema>;
@@ -44,6 +46,7 @@ const EMPTY_VALUES: PartnerFormValues = {
   main_partner: false,
   international_partner: false,
   sort_order: 0,
+  active: true,
 };
 
 export default function PartnersManager({ initialPartners }: { initialPartners: AdminPartner[] }) {
@@ -96,16 +99,34 @@ export default function PartnersManager({ initialPartners }: { initialPartners: 
   }
 
   async function onReorder(next: AdminPartner[]) {
+    const previous = partners;
     setPartners(next);
     const supabase = createClient();
 
-    try {
-      await Promise.all(
-        next.map((p, i) => supabase.from("partners").update({ sort_order: i }).eq("id", p.id)),
-      );
-      setPartners(next.map((p, i) => ({ ...p, sort_order: i })));
-    } catch {
-      toast.error("Failed to save order");
+    // supabase-js resolves with { error } instead of throwing, so a failed row
+    // has to be detected here — otherwise the UI keeps an order the DB rejected.
+    const results = await Promise.all(
+      next.map((p, i) => supabase.from("partners").update({ sort_order: i }).eq("id", p.id)),
+    );
+    const failed = results.find((r) => r.error);
+
+    if (failed) {
+      setPartners(previous);
+      toast.error(failed.error?.message ?? "Failed to save order");
+      return;
+    }
+
+    setPartners(next.map((p, i) => ({ ...p, sort_order: i })));
+  }
+
+  async function onToggleActive(partner: AdminPartner) {
+    const supabase = createClient();
+    const active = !partner.active;
+    setPartners((prev) => prev.map((p) => (p.id === partner.id ? { ...p, active } : p)));
+    const { error } = await supabase.from("partners").update({ active }).eq("id", partner.id);
+    if (error) {
+      setPartners((prev) => prev.map((p) => (p.id === partner.id ? { ...p, active: !active } : p)));
+      toast.error(error.message);
     }
   }
 
@@ -184,7 +205,7 @@ export default function PartnersManager({ initialPartners }: { initialPartners: 
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="sort_order">Sort order</Label>
-                <Input id="sort_order" type="number" {...form.register("sort_order")} />
+                <Input id="sort_order" type="number" {...form.register("sort_order", { valueAsNumber: true })} />
               </div>
               <label className="flex cursor-pointer items-center gap-2 text-sm text-neutral-700">
                 <Checkbox
@@ -199,6 +220,13 @@ export default function PartnersManager({ initialPartners }: { initialPartners: 
                   onCheckedChange={(checked) => form.setValue("international_partner", checked === true)}
                 />
                 International partner
+              </label>
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-neutral-700">
+                <Checkbox
+                  checked={form.watch("active")}
+                  onCheckedChange={(checked) => form.setValue("active", checked === true)}
+                />
+                Active (visible on site)
               </label>
               <Button type="submit" disabled={form.formState.isSubmitting} className="bg-[#e00327] hover:bg-[#c40320]">
                 {editing ? "Save changes" : "Create partner"}
@@ -223,6 +251,7 @@ export default function PartnersManager({ initialPartners }: { initialPartners: 
                 <TableHead className="w-16"></TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Type</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -256,6 +285,15 @@ export default function PartnersManager({ initialPartners }: { initialPartners: 
                     </div>
                   </TableCell>
                   <TableCell>
+                    <button type="button" onClick={() => onToggleActive(partner)} className="cursor-pointer">
+                      {partner.active ? (
+                        <Badge className="bg-[#e00327] hover:bg-[#c40320]">Active</Badge>
+                      ) : (
+                        <Badge variant="outline" className="hover:bg-neutral-100">Hidden</Badge>
+                      )}
+                    </button>
+                  </TableCell>
+                  <TableCell>
                     <div className="flex justify-end gap-2">
                       <Button variant="outline" size="icon" onClick={() => openEdit(partner)}>
                         <Pencil className="size-3.5" />
@@ -281,6 +319,7 @@ export default function PartnersManager({ initialPartners }: { initialPartners: 
         open={pickerOpen}
         onOpenChange={setPickerOpen}
         onSelect={(url) => form.setValue("logo_url", url, { shouldValidate: true })}
+        folder="partners"
       />
     </motion.div>
   );

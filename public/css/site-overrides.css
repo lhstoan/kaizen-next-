@@ -19,3 +19,336 @@
 	margin: 0 15px;
 	opacity: 1;
 }
+
+/* .iProduct--item .img is an <a> Fancybox trigger in this port (legacy wrapped the
+   same markup for the CDN Fancybox bundle) — flag it as zoomable, and keep the
+   colorway swatches/category tabs clickable-looking for good measure. */
+.iProduct--item .img {
+	cursor: zoom-in;
+}
+.iProduct--item .colors li,
+.iProduct--cate li {
+	cursor: pointer;
+}
+
+/* Hall of Fame — no legacy counterpart to port, so the rules live here rather than in
+   the compiled styles.css. Follows the club mockup: a full-bleed black board under the
+   main visual, a vertical year gutter, one white champion plate per season, and the
+   champion badge (red flag) stacked over the top-scorer plates on the right. */
+.iHof {
+	padding: 70px 0 90px;
+	background-color: #000;
+}
+.iHof--wrap {
+	width: min(var(--content-width), calc(100% - 40px));
+	margin: 0 auto;
+}
+.iHof--head {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 0 0 46px 120px;
+	color: #fff;
+	font-family: var(--font-kaizen);
+	text-transform: uppercase;
+}
+.iHof--head .champion {
+	font-size: 44px;
+	line-height: 1em;
+}
+.iHof--head .scorers {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	font-size: 44px;
+	line-height: 1em;
+}
+.iHof--head .scorers small {
+	font-size: 22px;
+	letter-spacing: 0.02em;
+}
+.iHof--list {
+	display: flex;
+	flex-direction: column;
+	gap: 26px;
+}
+.iHof--item {
+	display: grid;
+	grid-template-columns: 120px minmax(0, 1fr) 210px;
+	align-items: stretch;
+	gap: 0;
+	height: 150px;
+}
+.iHof--item .year {
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+	align-self: center;
+	justify-self: center;
+	color: var(--color-primary);
+	font-family: var(--font-kaizen);
+	font-size: 76px;
+	line-height: 1em;
+}
+.iHof--champion {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 10px 34px;
+	background-color: #fff;
+	color: #000;
+	font-family: var(--font-kaizen);
+	text-transform: uppercase;
+}
+.iHof--champion .rank {
+	font-size: 68px;
+	line-height: 0.95em;
+}
+.iHof--champion .name {
+	font-size: 34px;
+	line-height: 1.05em;
+}
+.iHof--logos {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.iHof--logos li {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 12px;
+	background-color: #fff;
+}
+/* Champion badge sits on the red flag, clipped to the diagonal used in the artwork. */
+.iHof--logos li.--champion {
+	background-color: var(--color-primary);
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 26px 100%);
+	padding-left: 34px;
+}
+.iHof--logos li img {
+	width: auto;
+	max-width: 100%;
+	max-height: 40px;
+	height: auto;
+	object-fit: contain;
+}
+
+@media screen and (max-width: 750px) {
+	.iHof {
+		padding: 36px 0 50px;
+	}
+	.iHof--head {
+		padding: 0 0 22px 56px;
+	}
+	.iHof--head .champion,
+	.iHof--head .scorers {
+		font-size: 24px;
+	}
+	.iHof--head .scorers small {
+		font-size: 14px;
+	}
+	.iHof--list {
+		gap: 14px;
+	}
+	.iHof--item {
+		grid-template-columns: 56px minmax(0, 1fr) 104px;
+		height: 90px;
+	}
+	.iHof--item .year {
+		font-size: 40px;
+	}
+	.iHof--champion {
+		padding: 8px 14px;
+	}
+	.iHof--champion .rank {
+		font-size: 36px;
+	}
+	.iHof--champion .name {
+		font-size: 17px;
+	}
+	.iHof--logos {
+		gap: 5px;
+	}
+	.iHof--logos li {
+		padding: 4px 6px;
+	}
+	.iHof--logos li.--champion {
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 14px 100%);
+		padding-left: 16px;
+	}
+	.iHof--logos li img {
+		max-height: 22px;
+	}
+}
+
+/* Team member page — the legacy theme has no players archive, so these rules turn the
+   homepage .iMember--list card (kept for its photo/badge styling) into a static grid
+   and add the ALL / MEN / WOMEN filter bar from the mockup. */
+.iTeam {
+	padding: 60px 0 80px;
+	background-color: #000;
+}
+.iTeam--wrap {
+	width: min(var(--content-width), calc(100% - 40px));
+	margin: 0 auto;
+}
+.iTeam--cate {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+	margin-bottom: 50px;
+}
+.iTeam--cate li {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	padding: 14px 40px;
+	background-color: #2f2f2f;
+	color: #fff;
+	font-family: var(--font-kaizen);
+	font-size: 30px;
+	line-height: 1em;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+.iTeam--cate li.active {
+	background-color: var(--color-primary);
+}
+.iTeam--cate li .jp {
+	font-family: var(--font-jp);
+	font-size: 17px;
+}
+.iTeam--list {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 30px 20px;
+	width: 100%;
+	margin: 0;
+}
+/* .iMember--list sizes its photo for the carousel; the grid cards are shorter. */
+.iTeam--list li {
+	position: relative;
+	opacity: 1;
+}
+.iTeam--list li .img {
+	height: 330px;
+}
+
+@media screen and (max-width: 750px) {
+	.iTeam {
+		padding: 30px 0 40px;
+	}
+	.iTeam--cate {
+		gap: 8px;
+		margin-bottom: 26px;
+	}
+	.iTeam--cate li {
+		flex: 1;
+		justify-content: center;
+		padding: 10px 6px;
+		font-size: 17px;
+	}
+	.iTeam--cate li .jp {
+		font-size: 10px;
+	}
+	.iTeam--list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 20px 12px;
+	}
+	.iTeam--list li .img {
+		height: 230px;
+	}
+}
+
+/* Hot news block — homepage only, no legacy counterpart. Three-up grid of cards over
+   a wider featured row, both on the black band from the mockup. */
+.iNews {
+	padding: 70px 0 90px;
+	background-color: #000;
+}
+.iNews--wrap {
+	width: min(var(--content-width), calc(100% - 40px));
+	margin: 0 auto;
+}
+/* .ih3 .en is black for the light sections it was written for — flip it on the
+   black hot-news band. */
+.iNews .ih3 .en {
+	color: #fff;
+}
+.iNews--list {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 28px 22px;
+	margin-top: 44px;
+}
+.iNews--list.--featured {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.iNews--item a {
+	display: block;
+	color: inherit;
+}
+.iNews--item .img {
+	position: relative;
+	width: 100%;
+	height: 210px;
+	overflow: hidden;
+	background-color: #1a1a1a;
+}
+.iNews--item.--large .img {
+	height: 330px;
+}
+.iNews--item .img img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.iNews--item .content {
+	padding: 12px 14px 16px;
+	background-color: #000;
+}
+.iNews--item.--large .content {
+	background-color: var(--color-primary);
+}
+.iNews--item .label {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	color: #fff;
+	font-family: var(--font-kaizen);
+	font-size: 18px;
+	line-height: 1em;
+	text-transform: uppercase;
+}
+.iNews--item .label .jp {
+	color: var(--color-primary);
+	font-family: var(--font-jp);
+	font-size: 12px;
+}
+.iNews--item.--large .label .jp {
+	color: #000;
+}
+.iNews--item .title {
+	margin-top: 10px;
+	color: #fff;
+	font-size: 12px;
+	line-height: 1.6em;
+	word-break: break-all;
+}
+
+@media screen and (max-width: 750px) {
+	.iNews {
+		padding: 36px 0 46px;
+	}
+	.iNews--list,
+	.iNews--list.--featured {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 18px;
+		margin-top: 24px;
+	}
+	.iNews--item .img,
+	.iNews--item.--large .img {
+		height: 200px;
+	}
+}

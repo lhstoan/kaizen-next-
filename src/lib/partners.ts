@@ -18,6 +18,7 @@ export async function getPartnerGroups() {
   const { data, error } = await supabase
     .from("partners")
     .select("id, name, logo_url, main_partner, international_partner")
+    .eq("active", true)
     .order("sort_order", { ascending: true });
 
   if (error || !data) {

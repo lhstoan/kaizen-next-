@@ -10,10 +10,12 @@ export default function ImagePickerDialog({
   open,
   onOpenChange,
   onSelect,
+  folder,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect: (url: string) => void;
+  folder?: string;
 }) {
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,8 @@ export default function ImagePickerDialog({
       .finally(() => setLoading(false));
   }, [open, images.length]);
 
-  const filtered = images.filter((src) => src.toLowerCase().includes(query.toLowerCase()));
+  const scoped = folder ? images.filter((src) => src.startsWith(`/images/${folder}/`)) : images;
+  const filtered = scoped.filter((src) => src.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

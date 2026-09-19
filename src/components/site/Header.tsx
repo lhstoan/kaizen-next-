@@ -4,6 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+const NAV_ITEMS = [
+  { href: "/", label: "WE'RE KAIZEN" },
+  { href: "/matches", label: "MATCHES" },
+  { href: "/team-member", label: "TEAM MEMBER" },
+  { href: "/products", label: "PRODUCT" },
+  { href: "/hall-of-fame", label: "HALL OF FAME" },
+];
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
@@ -29,9 +37,13 @@ export default function Header() {
         </div>
         <div className="iHeader--menu">
           <ul className="iHeader--list">
-            <li>
-              <Link href="/products">PRODUCT</Link>
-            </li>
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} onClick={() => setNavOpen(false)}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="iHeader--hamburger">

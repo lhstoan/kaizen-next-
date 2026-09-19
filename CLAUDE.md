@@ -1,89 +1,101 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with code in this repository.
+Kaizen Badminton club site — Next.js rebuild replacing legacy WP theme at `D:\Kaizenbadminton`
+(that repo's HTML/PHP = markup/CSS source of truth when porting new sections; port, don't reimplement design).
 
-Kaizen Badminton club marketing site — Next.js rebuild replacing the old WordPress theme at
-`D:\Kaizenbadminton` (`kaizen/` PHP theme + `wp-content/` deployed snapshot). That repo's
-`CLAUDE.md` documents the legacy theme in detail; treat its root static HTML (`index.html`,
-`product.html`, `matchs.html`, ...) and `kaizen/*.php` templates as the **content/markup/CSS
-source of truth** when porting a page — this repo doesn't reimplement design, it ports it.
+## Token-efficiency rules (mandatory)
+- Don't scan whole repo per task. Read only files directly relevant.
+- Don't reread unchanged files. Don't rediscover architecture — it's below.
+- Skip `node_modules`, `.next`, `public/images|fonts|favicon` unless task needs them.
+- Minimal diff, no unrelated refactor, no full-file rewrites for small edits.
+- Reuse existing component/hook/util/type before creating new one.
+- Don't install deps unless necessary.
 
 ## Tech stack
+Next.js App Router, React 19, TypeScript. Path alias `@/*` → `src/*`.
+- **Public site**: legacy compiled CSS as-is (no Tailwind). `next/image` is used in Partners/Members/MatchItem; keep plain `<img>` only where legacy CSS needs the aspect-ratio placeholder trick (`ProductCard`).
+- **Admin**: Tailwind v4 + shadcn/ui (radix-ui + class-variance-authority), react-hook-form + zod, framer-motion (entrance anim + `Reorder` for drag-and-drop), sonner (toasts), lucide-react (icons).
+- **Shared**: swiper (public Members carousel; admin per-color image gallery via `Thumbs` module).
+- **Backend**: Supabase (`@supabase/supabase-js`, `@supabase/ssr`) — Postgres + Auth + RLS. No separate API server.
 
-- Next.js (App Router), React 19, TypeScript
-- Tailwind v4 (`@import "tailwindcss"` in `src/app/globals.css`) — scoped to the **admin** UI only;
-  the public site reuses the legacy compiled CSS as-is (see below), not Tailwind classes
-- Radix UI primitives (dialog, dropdown-menu, select, tabs) + react-hook-form + zod — for admin
-  forms/CRUD, same pattern as `D:\OutSource\badminton`'s `src/components/ui/*`, but no shadcn
-  wrapper layer has been created yet in this repo
-- Supabase (`@supabase/supabase-js`, `@supabase/ssr`) — DB + auth for the admin panel; not wired up
-  yet (client/schema not created)
+Commands: `npm run dev`, `npm run build`, `npm run lint`. No test runner.
 
-## Commands
-
-```bash
-npm run dev      # next dev
-npm run build    # next build
-npm run lint     # eslint
-```
-
-No test runner configured yet.
-
-## Public site: porting legacy markup (important)
-
-The public pages are **not** written with Tailwind. They reuse the original theme's compiled CSS
-verbatim, loaded as plain stylesheets in `src/app/layout.tsx`:
-
-```
-public/css/styles.css        (compiled from the old repo's scss/, don't hand-edit — see below)
-public/css/responsive.css
-public/css/slick.css
-public/images/, public/fonts/, public/favicon/, favicon.ico   (copied 1:1 from the old repo)
-```
-
-When porting a page/section from the old repo:
-1. Read the equivalent `kaizen/*.php` template first (not the root static `.html` — the PHP
-   version is the actively-maintained one and encodes the real data shape: WordPress custom post
-   types/ACF fields via `get_field()`/`WP_Query`). The static HTML files are older prototypes and
-   may be missing sections the PHP version has (or vice versa) — cross-check both, PHP wins on
-   conflict.
-2. Keep the original class names exactly (`iHeader`, `iMainvisual`, `iMember--list`, `ih3`, `en`/`jp`
-   spans, etc.) — the legacy CSS selects on them, renaming breaks styling silently.
-3. Model each PHP `WP_Query` loop as a typed prop (see `src/types/home.ts`) fed by placeholder data
-   for now (`src/lib/placeholder-data.ts`) — this is what Supabase tables should eventually replace,
-   one table per WP custom post type (`member`, `matches`, `partner`, ...).
-4. Interactive bits that were jQuery in `js/common.js`/`js/top.js` (hamburger toggle, header
-   scroll-shrink class, slick carousel) get reimplemented as small client components with
-   `useState`/`useEffect` — don't reintroduce jQuery/slick as a dependency for behavior this simple.
-
-If you need to re-derive `styles.css` after a design change, edit the `.scss` in the old repo
-(`D:\Kaizenbadminton\scss/`) and recompile there, then re-copy the output — this repo's `public/css`
-is a copied build artifact, not a source file.
-
-## Layout
-
+## Project map
 ```
 src/
-  app/                Next.js App Router routes; layout.tsx loads legacy CSS + fonts globally
+  app/
+    (site)/            → public routes: page.tsx (home), matches/, products/
+                          (site)/layout.tsx injects legacy <link> CSS/fonts, wraps Header/Footer
+    admin/
+      login/           → public login page (Supabase signInWithPassword)
+      (protected)/     → auth-gated (layout.tsx redirects to /admin/login if no user)
+        partners/      → full CRUD (simplest reference — copy for a flat list section)
+        products/      → full CRUD (richest reference — color variants, per-color image gallery)
+        members/ matches/  → placeholder "Coming soon" (ComingSoon component), NOT built
+      loading.tsx, (protected)/loading.tsx → branded spinner
+    api/admin/images/route.ts → recursive fs readdir of public/images, feeds image picker
+    layout.tsx         → root layout, minimal (font only) — do not add site chrome here
   components/
-    site/             Public-site components ported from the legacy theme (Header, Footer,
-                       MainVisual, Members, Matches, Partners, ...) — legacy class names, no Tailwind
-    (admin components go in components/admin/ once the admin panel starts, following the
-    Radix + Tailwind + react-hook-form + zod pattern from D:\OutSource\badminton's src/components/ui/*)
-  types/home.ts        Typed shapes for ported WP data (Member, Match, Partner)
-  lib/placeholder-data.ts  Stand-in data until Supabase tables exist
-public/
-  css/, images/, fonts/, favicon/   copied verbatim from the legacy repo, paths must stay in sync
+    site/     → public components, legacy class names, NO Tailwind (Header, Footer, MainVisual,
+                Members, Matches, MatchItem, Partners, ProductCard, ProductGrid, SectionHeading, BodyAttrs)
+    admin/    → admin-only: admin-sidebar, admin-loading, coming-soon, partners-manager,
+                products-manager, image-picker-dialog, sign-out-button
+    ui/       → shadcn primitives (button, input, label, dialog, table, checkbox, card, badge, sonner)
+                — reuse these, don't hand-roll new primitives
+  lib/
+    supabase/client.ts (browser), supabase/server.ts (server, async cookies)
+    partners.ts         → getPartnerGroups() server query (main/international/other split)
+    products.ts         → getProducts() server query (snake_case row → camelCase Product)
+    placeholder-data.ts → mock Members/Matches data, still used by home + /matches
+  types/home.ts (Member, Match, Partner), product.ts (Product, ProductColor, PRODUCT_CATEGORIES)
+src/middleware.ts        → refreshes Supabase session cookie, matcher: /admin/:path*
+public/css, images, fonts, favicon  → copied verbatim from legacy repo; keep filenames in sync
+                           (some contain spaces, e.g. "images/logo moi/..." — quote in CSS url())
+                           EXCEPT css/site-overrides.css → hand-written, not compiled from legacy scss
 ```
 
-## Conventions
+## Feature boundaries
+Work on one, don't touch others unless direct dependency:
+- **Partners** — done (CRUD + drag-reorder). Reference for a flat list section.
+- **Products** — done (CRUD + drag-reorder + inline active toggle + color variants). Reference for anything with nested/array fields. Public `/products` reads Supabase.
+- **Members / Matches (admin)** — not built, currently `ComingSoon` placeholder only; public home + `/matches` still read `placeholder-data.ts`.
+- **Public site pages** (home/matches/products) — independent of admin; only share `types/` and, once wired, Supabase tables.
+- **Auth/middleware** — only touch when changing admin session/login behavior.
+- **Image picker** (`api/admin/images` + `image-picker-dialog.tsx`) — shared by any admin form needing an image field; reuse, don't duplicate.
 
-- Path alias: `@/*` → `src/*`.
-- Public-site components: plain legacy CSS class names, no Tailwind utility classes, no CSS
-  modules — mixing systems on the same element defeats the point of reusing the compiled CSS.
-- Admin components (once built): Tailwind + Radix, one shared primitive per visual pattern (mirror
-  the "search before creating" / no-duplicate-Button-or-Dialog rule from `D:\OutSource\badminton`'s
-  CLAUDE.md) rather than hand-rolled styled divs.
-- Images: use `next/image`; several legacy asset paths contain spaces (`images/logo moi/...`) —
-  keep them quoted/escaped as-is rather than renaming files, since the old repo and its CSS/PHP
-  still reference the same filenames.
+## Public site rules (critical)
+- Keep legacy class names exactly (`iHeader`, `iMainvisual`, `iMember--list`, `en`/`jp` spans, ...) — legacy CSS selects on them.
+- No Tailwind utility classes, no CSS modules on public-site components.
+- Don't hand-edit `public/css/*.css` — recompile from `.scss` in `D:\Kaizenbadminton\scss/` and re-copy.
+- When porting a new section: read `kaizen/*.php` in the legacy repo first (PHP is authoritative over root static `.html`, which may be stale). Split repeated markup into small reusable components (e.g. `MatchItem`/`TeamBlock` pattern) — don't inline-duplicate JSX across pages.
+- Legacy CSS relies on a "transparent placeholder `<img>` + background-image sibling" trick for aspect ratio — don't swap plain `<img>` for `next/image fill` on these.
+
+## Admin rules
+- Use shadcn/ui primitives in `components/ui/`; extend via `className`/cva variants, don't fork a new dialog/button/table.
+- Brand color `#e00327` for primary actions (buttons, active nav, badges).
+- New CRUD section (Members/Matches) → copy `partners-manager.tsx` + `lib/partners.ts` (flat fields) or `products-manager.tsx` + `lib/products.ts` (array/nested fields via `useFieldArray`): server component fetches, client component owns form (react-hook-form+zod) + table + Supabase mutations + toast.
+- New Supabase table → SQL migration file at repo root (`supabase_migration_<name>.sql`), public SELECT RLS + authenticated write RLS, matching pattern in existing `supabase_migration_partners*.sql`.
+- Reorder features → framer-motion `Reorder.Group`/`Reorder.Item` (`as="tbody"`/`as="tr"`), persist `sort_order` via `Promise.all` of per-row updates, not a batch RPC (none exists yet).
+
+## Coding workflow
+1. Understand request. 2. Identify minimum files (use map above). 3. Read only those. 4. Smallest safe change. 5. Verify affected feature only (browser check for UI). 6. Stop.
+
+## Debugging workflow
+1. Symptom. 2. Trace smallest relevant path (site vs admin vs lib vs Supabase). 3. Read only required files. 4. Root cause. 5. Minimal fix. 6. Verify.
+Known recurring env issue: stale Turbopack cache on Windows shows already-fixed code as errors — kill port 3000 process + `rm -rf .next` + restart, don't debug further before ruling this out.
+
+## Response format
+Implementation:
+```
+DONE
+- Changed: `file`
+- Result: one sentence
+- Verify: one sentence
+```
+Bug:
+```
+ROOT CAUSE: one sentence
+FIX: `file`
+VERIFY: one sentence
+```
+No long summaries unless asked.

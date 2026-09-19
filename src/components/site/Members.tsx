@@ -1,17 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import SectionHeading from "@/components/site/SectionHeading";
+import MemberCard from "@/components/site/MemberCard";
 import type { Member } from "@/types/home";
 
 export default function Members({ members }: { members: Member[] }) {
   return (
     <section className="iMember --padding">
       <div className="iMember--wrap --wrap">
-        <SectionHeading en="Players" jp="プレイヤー" />
+        <SectionHeading en="Members" jp="プレイヤー" />
         <Swiper
           className="iMember--list"
           modules={[Autoplay]}
@@ -27,18 +27,7 @@ export default function Members({ members }: { members: Member[] }) {
         >
           {members.map((member) => (
             <SwiperSlide key={member.id} tag="li">
-              <div className="img">
-                <Image src={member.photoUrl} alt={member.fullName} width={200} height={200} />
-              </div>
-              <div className="info">
-                <div className="city">
-                  <Image src={`/images/${member.nationality}.png`} alt={member.nationality} width={24} height={16} />
-                </div>
-                <div className="title">
-                  <span className="name">{member.fullName}</span>
-                  <span className="role">{member.event.join("/")}</span>
-                </div>
-              </div>
+              <MemberCard member={member} />
             </SwiperSlide>
           ))}
         </Swiper>
