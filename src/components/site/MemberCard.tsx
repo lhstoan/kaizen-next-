@@ -11,7 +11,9 @@ export default function MemberCard({ member }: { member: Member }) {
       </div>
       <div className="info">
         <div className="city">
-          <Image src={`/images/${member.nationality}.png`} alt={member.nationality} width={24} height={16} />
+          {/* Legacy CSS renders this badge at ~72px wide and crops it, so the 24px
+              intrinsic size it used to declare made next/image serve a 32px file. */}
+          <Image src={`/images/${member.nationality}.png`} alt={member.nationality} width={150} height={100} />
         </div>
         <div className="title">
           <span className="name">{member.fullName}</span>
