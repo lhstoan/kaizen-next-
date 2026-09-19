@@ -492,3 +492,12 @@
 	color: var(--color-primary);
 	text-decoration: underline;
 }
+
+/* Body copy switches from the legacy Roboto to Lexend. Headings are untouched: they
+   use --font-kaizen (Anton) / --font-jp (Dela Gothic) and keep their own faces. */
+:root {
+	--font-family: "Lexend", sans-serif;
+}
+body {
+	font-family: var(--font-family);
+}

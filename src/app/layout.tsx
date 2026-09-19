@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Geist } from "next/font/google";
+import { Lexend } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const lexend = Lexend({ subsets: ["latin", "vietnamese"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "KAIZEN BADMINTON",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ja" className={cn("font-sans", geist.variable)}>
+    <html lang="ja" className={cn("font-sans", lexend.variable)}>
       <body>{children}</body>
     </html>
   );
