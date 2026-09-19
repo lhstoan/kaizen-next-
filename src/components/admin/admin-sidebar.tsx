@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Users, Trophy, Calendar, ShoppingBag, Medal, Newspaper, FileText, Settings } from "lucide-react";
+import { Users, Trophy, Calendar, ShoppingBag, Medal, Newspaper, FileText, Settings, LayoutDashboard } from "lucide-react";
 
 const NAV_ITEMS = [
+  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/members", label: "Members", icon: Users },
   { href: "/admin/matches", label: "Matches", icon: Calendar },
   { href: "/admin/products", label: "Products", icon: ShoppingBag },
@@ -40,7 +41,7 @@ export default function AdminSidebar() {
 
       <nav className="relative flex flex-col gap-1 px-3">
         {NAV_ITEMS.map((item, i) => {
-          const active = pathname.startsWith(item.href);
+          const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
             <motion.div
