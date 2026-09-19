@@ -234,7 +234,7 @@
 	opacity: 1;
 }
 .iTeam--list li .img {
-	height: 330px;
+	height: 430px;
 }
 
 @media screen and (max-width: 750px) {
@@ -270,7 +270,7 @@
 		gap: 20px 12px;
 	}
 	.iTeam--list li .img {
-		height: 230px;
+		height: 300px;
 	}
 }
 
